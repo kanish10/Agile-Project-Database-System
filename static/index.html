@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="grid-container" id="gridContainer">
+    </div>
+
+    <button id="add-project-btn">+</button>
+
+    <div id="add-project-popup" class="Popup">
+        <div id="popup-content">
+            <span id="add-project-close-btn" class="close-btn">&times;</span>
+            <h2>Enter Project Details</h2>
+            <form id="dataForm">
+
+                <label for="proj-name">Name:</label><br>
+                <input type="text" id="proj-name" name="proj-name"><br>
+
+                <label for="proj-desc">Description:</label><br>
+                <textarea id="proj-desc" name="proj-desc"></textarea><br>
+
+                <label for="proj-deadline">Deadline:</label><br>
+                <input type="date" id="proj-deadline" name="proj-deadline"><br>
+                
+                <button type="button" id="saveBtn">Add Project</button>
+            </form>
+        </div>
+    </div>
+
+    <button id="filter-deadline-btn">Filter</button>
+
+    <div id="filter-deadline-popup" class="Popup">
+        <div id="popup-content">
+            <span id="filter-close-btn" class="close-btn">&times;</span>
+            <h2>Filter by Deadline</h2>
+            <form id="deadlineForm">
+                <label for="filter-condition">Filter condition:</label><br>
+                <input type="text" id="filter-condition" name="filter-condition"><br>
+                <button type="button" id="filter-apply-button">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="project-info-div" class="projectInfoDiv">
+        <p>Average number of team members per project</p>
+        <button type="button" class="show-btn">Show</button>
+    
+        <p>Team members who are part of all projects</p>
+        <button type="button" class="show-btn">Show</button>
+    </div>
+
+    <div id="projection-div">
+        <label for="projection-dropdown">Choose Relation:</label>
+        <select id="projection-dropdown" name="projection-dropdown">
+            <!-- <option value="option 1">Option 1</option>
+            <option value="option 2">Option 2</option> -->
+        </select>
+        
+        <form id="attribution-select-form">
+            <label for="exampleDropdown">Choose Attributes:</label>
+
+        </form>
+
+        <button type="button" id="show-projection-btn">Show Projection</button>
+    </div>
+
+    <button id="reset-btn">Reset</button>
+    
+    
+
+    
+    <script src="../static/app.js"></script>
+</body>
+</html>

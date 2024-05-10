@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+    <div class="projectSection" id="project-info-div">
+        <h2 id="project-name">Project Name</h2>
+        <p id="project-desc">Project Description</p>
+        <p id="project-deadline">Project Deadline</p>
+    </div>
+
+    <div class="projectSection" id="team-members-div">
+        <h2>Team Members</h2>
+        <table id="team-members-table">
+
+        </table>
+        
+        <button type="button" id="add-team-member-btn">Add Team Member</button>
+        <div id="add-team-member-popup" class="Popup">
+            <div id="popup-content">
+                <span id="add-team-member-close-btn" class="close-btn">&times;</span>
+                <h2>Add Team Member</h2>
+                <form id="teamMemberForm">
+                    <label for="team-member-name">Name:</label><br>
+                    <input type="text" id="team-member-name" name="team-member-name"><br>
+                    <label for="team-member-email">Email:</label><br>
+                    <input type="email" id="team-member-email" name="team-member-email"><br>
+                    <button type="button" id="saveBtn">Add Team Member</button>
+                </form>
+            </div>
+        </div>  
+
+    </div>
+
+    <div class="projectSection" id="tasks-div">
+    </div> 
+
+</body>
+</html>

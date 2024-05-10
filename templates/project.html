@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body class="ProjectPage">
+    <button id="back-btn" class="Button">&larr;</button>
+    <div class="projectSection" id="project-info-section">
+        <h1 id="project-name"></h1>
+        <h3>Description:</h3>
+        <p id="project-desc"></p>
+        <h3>Deadline:</h3>
+        <p id="project-deadline"></p>
+    </div>
+
+    <div class="projectSection" id="tasksandbugs-section">
+        <h2>Tasks</h2>
+        <div class="taskBugsDiv">
+            <table id="task-bugs-table">
+            </table>
+        </div>
+
+        <button id="show-bugs-per-task-btn" class="Button">Show bugs per task</button>
+
+        
+        <div class="having-container">
+            <span>Show the tasks with bugs</span>
+            <select id="task-filter-dropdown">
+                <option value="="><code>=</code></option>
+                <option value=">"><code>&gt;</code></option>
+                <option value="<"><code>&lt;</code></option>
+                <option value=">="><code>&gt;=</code></option>
+                <option value="<="><code>&lt;=</code></option>
+                <option value="<>"><code><></code></option>
+            </select>
+            <input type="text" id="bug-input-field" placeholder="#" />
+        </div>
+        <button id="tasks-filter-bugs-btn" class="Button">Show tasks</button>
+
+        <h2>Bugs</h2>
+        <div class="taskBugsDiv">
+            <table id="bugs-table">
+            </table>
+        </div>
+
+    </div>
+
+    <div class="projectSection" id="team-members-section">
+        <h2>Team members</h2>
+
+        <table id="team-members-table">
+            
+        </table>
+
+        <button id="insert-team-member-btn" class="Button">Insert Team Member</button>
+        <button id="delete-team-member-btn" class="Button">Delete Team Member</button>
+        <button id="update-team-member-btn" class="Button">Update Team Member</button>
+
+        <form id="reportedBy-form">
+            <label for="reportedBy">Bugs reported by employee ID:</label><br>
+            <input type="text" id="reportedBy" name="reportedBy"><br>
+            <button type="button" id="report-bug-btn" class="Button">Reported By</button>
+            <p id="reported-by-info"></p>
+        </form>
+    </div>
+
+    <div id="project-info-popup" class="Popup">
+        <div id="popup-content">
+            <span id="info-close-btn" class="close-btn">&times;</span>
+            
+            <p id="info-title"></p>
+            <table id="project-info-table">
+            
+            </table>
+            
+        </div>
+    </div>
+
+    <div id="insert-team-member-popup" class="Popup">
+        <div id="popup-content">
+            <span id="insert-team-member-close-btn" class="close-btn">&times;</span>
+            
+            <label for="insert-tm-id">Team ID:</label><br>
+            <input type="text" id="insert-tm-id" name="insert-tm-id"><br>
+
+            <label for="insert-empl-id">Employee ID:</label><br>
+            <input type="text" id="insert-empl-id" name="insert-empl-id"><br>
+
+            <label for="insert-tmb-name">Team Member Name:</label><br>
+            <input type="text" id="insert-tmb-name" name="insert-tmb-name"><br>
+
+            <label for="insert-tmb-seniority">Team Member Seniority:</label><br>
+            <input type="text" id="insert-tmb-seniority" name="insert-tmb-seniority"><br>
+
+            <button type="button" id="insert-team-member-save-btn">Add Team Member</button>
+        </div>
+    </div>
+
+    <div id="delete-team-member-popup" class="Popup">
+        <div id="popup-content">
+            <span id="delete-team-member-close-btn" class="close-btn">&times;</span>
+            
+            <label for="del-empl-id">Employee ID to delete:</label><br>
+            <input type="text" id="del-empl-id" name="del-empl-id"><br>
+
+            <button type="button" id="delete-team-member-save-btn">Delete Team Member</button>
+        </div>
+    </div>
+
+    <div id="update-team-member-popup" class="Popup">
+        <div id="popup-content">
+            <span id="update-team-member-close-btn" class="close-btn">&times;</span>
+            
+            <label for="update-empl-id">Employee ID to update:</label><br>
+            <input type="text" id="update-empl-id" name="update-empl-id"><br>
+
+            <label for="update-tm-id">Team ID:</label><br>
+            <input type="text" id="update-tm-id" name="update-tm-id"><br>
+
+            <label for="update-tmb-name">Team Member Name:</label><br>
+            <input type="text" id="update-tmb-name" name="update-tmb-name"><br>
+
+            <label for="update-tmb-seniority">Team Member Seniority:</label><br>
+            <input type="text" id="update-tmb-seniority" name="update-tmb-seniority"><br>
+
+            <button type="button" id="update-team-member-save-btn">Update Team Member</button>
+
+        </div>
+    </div>
+
+
+    <script src="../static/projectPage_app.js"></script>
+ 
+</body>
+</html>

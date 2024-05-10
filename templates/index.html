@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body id="home-body">
+    <div class="grid-container" id="gridContainer">
+    </div>
+
+    <button id="add-project-btn" class="Button">+</button>
+
+    <div id="add-project-popup" class="Popup">
+        <div id="popup-content">
+            <span id="add-project-close-btn" class="close-btn">&times;</span>
+            <h2>Enter Project Details</h2>
+            <form id="dataForm">
+
+                <label for="proj-name">Name:</label><br>
+                <input type="text" id="proj-name" name="proj-name"><br>
+
+                <label for="proj-desc">Description:</label><br>
+                <textarea id="proj-desc" name="proj-desc"></textarea><br>
+
+                <label for="proj-deadline">Deadline:</label><br>
+                <input type="date" id="proj-deadline" name="proj-deadline"><br>
+                
+                <button type="button" id="saveBtn">Add Project</button>
+            </form>
+        </div>
+    </div>
+
+    <button id="filter-deadline-btn" class="Button">Filter</button>
+
+    <div id="filter-deadline-popup" class="Popup">
+        <div id="popup-content">
+            <span id="filter-close-btn" class="close-btn">&times;</span>
+            <h2>Filter by Deadline</h2>
+            <form id="deadlineForm">
+                <label for="filter-condition">Filter condition:</label><br>
+                <input type="text" id="filter-condition" name="filter-condition"><br>
+                <button type="button" id="filter-apply-button">Filter</button>
+            </form>
+
+            <div id="filter-syntax-info">
+                <p>Filter syntax:</p>
+                <p><b>comparison operators</b>: 
+                    <br>equal: <code>=</code>
+                    <br>greater than: <code>&gt;</code>
+                    <br>less than: <code>&lt;</code>
+                    <br>greater than or equal to: <code>&gt;=</code>
+                    <br>less than or equal to: <code>&lt;=</code>
+                    <br>not equal to: <code><></code>
+                    <br>string matching:<code>LIKE</code>
+                </p>
+                <p><b>logical operators</b>: 
+                    <br>and: <code>AND</code>
+                    <br>or: <code>OR</code>
+                    <br>not: <code>NOT</code>
+                </p>
+                <p>Example: <code>Deadline &gt; 2022-01-01 AND Deadline &lt; 2022-02-01</code></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="project-info-popup" class="Popup">
+        <div id="popup-content">
+            <span id="info-close-btn" class="close-btn">&times;</span>
+            
+            <p id="info-title"></p>
+            <table id="project-info-table">
+            
+            </table>
+            
+        </div>
+    </div>
+
+    <div id="project-info-div" class="projectInfoDiv">
+        <p>Average number of team members per team</p>
+        <button type="button" class="Button show-btn" id="show-average-btn">Show</button>
+    
+        <p>Teams which are part of all projects</p>
+        <button type="button" class="Button show-btn" id="show-all-teams-btn">Show</button>
+    </div>
+
+    <div id="projection-div">
+        <label for="projection-dropdown">Choose Relation:</label>
+        <select id="projection-dropdown" name="projection-dropdown">
+            <!-- <option value="option 1">Option 1</option>
+            <option value="option 2">Option 2</option> -->
+        </select>
+        
+        <form id="attribution-select-form">
+            <label for="attribution-select-form">Choose Attributes:</label>
+
+        </form>
+
+        <button type="button" id="show-projection-btn" class="Button show-btn">Show Projection</button>
+    </div>
+
+    <button id="reset-btn" class="Button">Reset</button>
+    
+    
+
+    
+    <script src="../static/home_app.js"></script>
+</body>
+</html>
