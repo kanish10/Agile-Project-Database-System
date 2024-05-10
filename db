@@ -1,1 +1,344 @@
+USE cpsc304;
+DROP TABLE Designers CASCADE CONSTRAINTS;
+DROP TABLE Managers CASCADE CONSTRAINTS;
+DROP TABLE QAs CASCADE CONSTRAINTS;
+DROP TABLE Engineers CASCADE CONSTRAINTS;
+DROP TABLE BlockedBy CASCADE CONSTRAINTS;
+DROP TABLE TaskHaveBugs CASCADE CONSTRAINTS;
+DROP TABLE Bugs CASCADE CONSTRAINTS;
+DROP TABLE Files CASCADE CONSTRAINTS;
+DROP TABLE Repositories CASCADE CONSTRAINTS;
+DROP TABLE Releases CASCADE CONSTRAINTS;
+DROP TABLE WorkOnBy CASCADE CONSTRAINTS;
+DROP TABLE TeamMembers CASCADE CONSTRAINTS;
+DROP TABLE AssignTo CASCADE CONSTRAINTS;
+DROP TABLE Teams CASCADE CONSTRAINTS;
+DROP TABLE Projects CASCADE CONSTRAINTS;
+DROP TABLE Employees CASCADE CONSTRAINTS;
+-- DROP TABLE Tasks CASCADE CONSTRAINTS;
+DROP TABLE PostNormTasksR1 CASCADE CONSTRAINTS;
+DROP TABLE PostNormTasksR2 CASCADE CONSTRAINTS;
+DROP TABLE PostNormTasksR3 CASCADE CONSTRAINTS;
+DROP DATABASE cpsc304;
 
+CREATE DATABASE cpsc304;
+USE cpsc304;
+
+CREATE TABLE Projects (
+  Name VARCHAR(255),
+  Description VARCHAR(255) UNIQUE,
+  Deadline DATE,
+  PRIMARY KEY (Name)
+);
+
+CREATE TABLE Teams (
+  TeamID INT,
+  TeamSize INT,
+  TeamFunction VARCHAR(255),
+  PRIMARY KEY (TeamID)
+);
+
+CREATE TABLE TeamMembers (
+  EmployeeID INT,
+  TeamID INT,
+  Name VARCHAR(255),
+  Seniority INT,
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (TeamID) REFERENCES Teams(TeamID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Releases (
+  Version VARCHAR(255),
+  Name VARCHAR(255),
+  ProjectName VARCHAR(255) NOT NULL,
+  Changes VARCHAR(255),
+  ReleaseDate DATE,
+  PRIMARY KEY (Version, Name),
+  FOREIGN KEY (ProjectName) REFERENCES Projects(Name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Repositories (
+  URL VARCHAR(255) PRIMARY KEY,
+  ProjectName VARCHAR(255) NOT NULL,
+  Name VARCHAR(255),
+  FOREIGN KEY (ProjectName) REFERENCES Projects(Name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Files (
+  Path VARCHAR(255),
+  URL VARCHAR(255) NOT NULL,
+  FileName VARCHAR(255),
+  PRIMARY KEY (Path),
+  FOREIGN KEY (URL) REFERENCES Repositories(URL) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Bugs (
+  ID INT,
+  Description VARCHAR(255),
+  Severity INT,
+  PRIMARY KEY (ID)
+);
+
+
+
+CREATE TABLE AssignTo (
+  Name VARCHAR(255),
+  TeamID INT,
+  PRIMARY KEY (Name, TeamID),
+  FOREIGN KEY (Name) REFERENCES Projects(Name) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (TeamID) REFERENCES Teams(TeamID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE WorkOnBy (
+  EmployeeID INT,
+  Version VARCHAR(255),
+  ReleaseName VARCHAR(255),
+  PRIMARY KEY (EmployeeID, Version, ReleaseName),
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (Version, ReleaseName) REFERENCES Releases(Version, Name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+CREATE TABLE Engineers (
+  EmployeeID INT NOT NULL,
+  TechStack VARCHAR(255),
+  MainPushAccess CHAR(1) CHECK (MainPushAccess IN ('Y', 'N')),
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE QAs (
+  EmployeeID INT NOT NULL,
+  AutomationLevel INT,
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Managers (
+  EmployeeID INT NOT NULL,
+  Tools VARCHAR(255),
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Designers (
+  EmployeeID INT NOT NULL,
+  Specialization VARCHAR(255),
+  PRIMARY KEY (EmployeeID),
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE PostNormTasksR3 (
+  Description VARCHAR(255) UNIQUE,
+  TaskID INT,
+  ProjectName VARCHAR(255),
+  Progress INT,
+  PRIMARY KEY (TaskID, ProjectName),
+  FOREIGN KEY (ProjectName) REFERENCES Projects(Name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE PostNormTasksR2 (
+  Description VARCHAR(255),
+  Priority INT UNIQUE,
+  PRIMARY KEY (Description),
+  FOREIGN KEY (Description) REFERENCES PostNormTasksR3(Description) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE PostNormTasksR1 (
+  Priority INT,
+  Deadline DATE,
+  PRIMARY KEY (Priority),
+  FOREIGN KEY (Priority) REFERENCES PostNormTasksR2(Priority) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE TaskHaveBugs (
+  BugID INT,
+  TaskID INT,
+  ProjectName VARCHAR(255),
+  PRIMARY KEY (BugID, TaskID, ProjectName),
+  FOREIGN KEY (BugID) REFERENCES Bugs(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (TaskID) REFERENCES PostNormTasksR3(TaskID) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (ProjectName) REFERENCES Projects(Name) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE BlockedBy (
+  BlockerTaskID INT,
+  BlockedTaskID INT,
+  PRIMARY KEY (BlockerTaskID, BlockedTaskID),
+  FOREIGN KEY (BlockerTaskID) REFERENCES PostNormTasksR3(TaskID) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (BlockedTaskID) REFERENCES PostNormTasksR3(TaskID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE ReportedBy (
+  BugID INT,
+  EmployeeID INT NOT NULL,
+  PRIMARY KEY (BugID, EmployeeID),
+  FOREIGN KEY (BugID) REFERENCES Bugs(ID) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (EmployeeID) REFERENCES TeamMembers(EmployeeID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+INSERT INTO Projects (Name, Description, Deadline) VALUES
+('Search', 'Search Engine', '2024-03-15'),
+('Ads', 'Ad integration', '2024-04-30'),
+('Networking', 'Network routing', '2024-05-20'),
+('Classifier', 'CNN image classification', '2024-06-10'),
+('Frontend', 'UI for website', '2024-07-25');
+
+INSERT INTO Teams (TeamID, TeamSize, TeamFunction) VALUES
+(1, 2, 'Development'),
+(2, 1, 'Testing'),
+(3, 4, 'Design'),
+(4, 2, 'Support'),
+(5, 1, 'Marketing');
+
+INSERT INTO AssignTo (Name, TeamID) VALUES
+('Search', 1),
+('Ads', 2),
+('Networking', 3),
+('Classifier', 4),
+('Frontend', 5),
+('Ads', 1),
+('Networking', 1),
+('Classifier', 1),
+('Frontend', 1);
+
+INSERT INTO TeamMembers (EmployeeID, TeamID, Name, Seniority) VALUES
+(1, 1, 'John', 3),
+(2, 1, 'Alice', 2),
+(3, 3, 'Bob', 4),
+(4, 4, 'Emma', 1),
+(5, 4, 'Tom', 5),
+(6, 3, 'Jim', 3),
+(7, 3, 'Jane', 2),
+(8, 3, 'Sam', 4),
+(9, 2, 'ABC', 1),
+(10, 5, 'XYZ', 2);
+
+-- Ensure the Version and ReleaseName columns are correctly defined in the Releases table before inserting into WorkOnBy
+INSERT INTO Releases (Version, Name, ProjectName, Changes, ReleaseDate) VALUES
+('1', 'Release1', 'Search', 'Bug fixes and enhancements', '2024-03-10'),
+('2', 'Release2', 'Ads', 'New feature additions', '2024-04-20'),
+('3', 'Release3', 'Networking', 'Performance improvements', '2024-05-15'),
+('4', 'Release4', 'Classifier', 'Major overhaul and redesign', '2024-06-30'),
+('5', 'Release5', 'Frontend', 'Marketing campaign updates', '2024-07-20');
+
+-- Assuming WorkOnBy table's structure is aligned with these columns
+INSERT INTO WorkOnBy (EmployeeID, Version, ReleaseName) VALUES
+(1, '1', 'Release1'),
+(2, '2', 'Release2'),
+(3, '3', 'Release3'),
+(4, '3', 'Release3'),
+(5, '3', 'Release3');
+
+INSERT INTO Repositories (URL, ProjectName, Name) VALUES
+('http://example.com/repo1', 'Search', 'Repo1'),
+('http://example.com/repo2', 'Ads', 'Repo2'),
+('http://example.com/repo3', 'Networking', 'Repo3'),
+('http://example.com/repo4', 'Classifier', 'Repo4'),
+('http://example.com/repo5', 'Frontend', 'Repo5');
+
+INSERT INTO Files (Path, URL, FileName) VALUES
+('/path1', 'http://example.com/repo1', 'file1.txt'),
+('/path2', 'http://example.com/repo2', 'file2.txt'),
+('/path3', 'http://example.com/repo3', 'file3.txt'),
+('/path4', 'http://example.com/repo4', 'file4.txt'),
+('/path5', 'http://example.com/repo5', 'file5.txt');
+
+INSERT INTO Bugs (ID, Description, Severity) VALUES
+(1, 'Bug description 1', 3),
+(2, 'Bug description 2', 2),
+(3, 'Bug description 3', 1),
+(4, 'Bug description 4', 2),
+(5, 'Bug description 5', 3),
+(6, 'Bug Description 6', 1),
+(7, 'Bug description 7', 2),
+(8, 'Bug description 8', 1),
+(9, 'Bug description 9', 3),
+(10, 'Bug description 10', 2),
+(11, 'Bug description 11', 1);
+
+INSERT INTO PostNormTasksR3 (TaskID, ProjectName, Description, Progress) VALUES
+(1, 'Search', 'Task description 1', 50),
+(2, 'Ads', 'Task description 2', 75),
+(3, 'Networking', 'Task description 3', 30),
+(4, 'Classifier', 'Task description 4', 90),
+(5, 'Frontend', 'Task description 5', 60),
+(6, 'Classifier', 'Task description 6', 82);
+
+
+INSERT INTO PostNormTasksR2 (Description, Priority) VALUES
+('Task description 1', 1),
+('Task description 2', 2),
+('Task description 3', 3),
+('Task description 4', 4),
+('Task description 5', 5),
+('Task description 6', 6);
+
+-- Note: Ensure PostNormTasks tables are created and interlinked correctly before these inserts
+INSERT INTO PostNormTasksR1 (Priority, Deadline) VALUES
+(1, '2024-03-20'),
+(2, '2024-04-25'),
+(3, '2024-05-30'),
+(4, '2024-06-15'),
+(5, '2024-07-30'),
+(6, '2024-05-15');
+
+INSERT INTO Engineers (EmployeeID, TechStack, MainPushAccess) VALUES
+(1, 'Java, Spring', 'Y'),
+(2, 'Python, Django', 'N'),
+(3, 'JavaScript, React', 'Y'),
+(4, 'C#, .NET', 'N'),
+(5, 'Ruby, Rails', 'Y');
+
+INSERT INTO QAs (EmployeeID, AutomationLevel) VALUES
+(1, 3),
+(2, 2),
+(3, 1),
+(4, 2),
+(5, 3);
+
+INSERT INTO Managers (EmployeeID, Tools) VALUES
+(1, 'Jira, Confluence'),
+(2, 'Trello, Slack'),
+(3, 'Asana, Basecamp'),
+(4, 'GitHub, GitLab'),
+(5, 'Bitbucket, Jenkins');
+
+INSERT INTO Designers (EmployeeID, Specialization) VALUES
+(1, 'UI/UX design'),
+(2, 'Graphic design'),
+(3, 'Web design'),
+(4, 'Product design'),
+(5, 'Interior design');
+
+-- Note: Ensure Tasks and Bugs tables are populated before TaskHaveBugs due to FK constraints
+INSERT INTO TaskHaveBugs (BugID, TaskID, ProjectName) VALUES
+(1, 1, 'Search'),
+(2, 2, 'Ads'),
+(3, 3, 'Networking'),
+(4, 4, 'Classifier'),
+(5, 5, 'Frontend'),
+(6, 4, 'Classifier'),
+(7, 4, 'Classifier'),
+(8, 4, 'Classifier'),
+(9, 4, 'Classifier'),
+(10, 4, 'Classifier'),
+(11, 6, 'Classifier');
+
+INSERT INTO BlockedBy (BlockerTaskID, BlockedTaskID) VALUES 
+(1, 2),
+(2, 3),
+(3, 4),
+(4, 5),
+(1, 5);
+
+
+INSERT INTO ReportedBy (BugID, EmployeeID) 
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(1, 5);
